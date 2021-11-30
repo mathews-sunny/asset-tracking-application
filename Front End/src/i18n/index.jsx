@@ -80,7 +80,8 @@ i18n
             trackedAssets: "Tracked Assets",
             assetsList: "Assets List",
             profile: "User Profile",
-            mainPage: "Main Page"
+            mainPage: "Main Page",
+            add: "Add"
           },
         },
       },
