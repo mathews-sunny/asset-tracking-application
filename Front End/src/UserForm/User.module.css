@@ -1,0 +1,8 @@
+.user {
+     display: flex;
+     flex:.75;
+     justify-content: center;
+}
+.card {
+     height: fit-content;
+}

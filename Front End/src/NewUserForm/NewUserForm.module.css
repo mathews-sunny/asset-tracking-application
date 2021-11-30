@@ -1,0 +1,8 @@
+.newuser {
+    display: flex;
+    flex:1;
+}
+
+.spinner {
+    justify-content: center;
+}
