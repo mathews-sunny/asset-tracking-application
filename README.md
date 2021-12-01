@@ -46,11 +46,13 @@ React Js supported by Spring REST backend.
    1. [Sql Scripts](https://github.com/mathews-sunny/hahn-applicationprocess-application/tree/master/Scripts/) contains all the sql db scripts
       required to create the database (user_asset_tracker) and tables (users, address, and asset). 
    2. All the files other than front end folder and scripts are related to API. Update url, username and password in the 
-      hibernate.cfg.xml file with created DB details.
+      hibernate.cfg.xml file as per created DB details.
       
-           <property name="connection.url">jdbc:mysql://localhost:3306/user_asset_tracker?useSSL=false&amp;serverTimezone=UTC</property>
-           <property name="connection.username">hahnapplication</property>
-           <property name="connection.password">7a6B2I51o#e*3</property>
+          <property name="connection.url">
+              jdbc:mysql://localhost:3306/user_asset_tracker?useSSL=false&amp;serverTimezone=UTC
+          </property>
+          <property name="connection.username">yourUserName</property>
+          <property name="connection.password">yourPassword</property>
         
    3. Start the application on a server and the endpoints will be exposed!! Thats all with the API part. eg endpoints :
    
