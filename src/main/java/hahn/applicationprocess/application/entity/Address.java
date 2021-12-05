@@ -24,13 +24,13 @@ public class Address {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "id")
 	private int id;
-	
+
 	@Column(name = "postal_code")
 	private int postalCode;
-	
+
 	@Column(name = "house_number")
 	private String houseNumber;
-	
+
 	@Column(name = "street")
 	private String street;
 

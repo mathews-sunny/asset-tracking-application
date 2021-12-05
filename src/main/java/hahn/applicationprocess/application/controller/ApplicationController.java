@@ -1,6 +1,7 @@
 package hahn.applicationprocess.application.controller;
 
 import java.util.List;
+import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -27,42 +28,42 @@ import hahn.applicationprocess.application.entity.User;
 @RequestMapping("/api")
 public class ApplicationController {
 
-	//autowire user service
+	// autowire user service
 	@Autowired
 	private UserService userService;
-	
-	//autowire asset service
+
+	// autowire asset service
 	@Autowired
 	private AssetService assetService;
-	
+
 	// add code for the "/users" endpoint
 	@CrossOrigin
 	@GetMapping("/users")
-	public List<User> getUsers() {		
+	public List<User> getUsers() {
 		return userService.getUsers();
 	}
-	
-	//fetch user using mail id and first name
+
+	// fetch user using mail id and first name
 	@CrossOrigin
 	@GetMapping("/userdetails")
-	public User getUserDetail(@RequestParam("UserFirstName") String firstName, @RequestParam("MailId") String mailId) {		
+	public User getUserDetail(@RequestParam("UserFirstName") String firstName, @RequestParam("MailId") String mailId) {
 		return userService.getUserDetails(mailId, firstName);
 	}
-	
+
 	// add code for the "/users/{userId}" endpoint
 	@CrossOrigin
 	@GetMapping("/users/{userId}")
-	public User getUser(@PathVariable int userId) {		
+	public User getUser(@PathVariable int userId) {
 		return userService.getUser(userId);
 	}
-	
+
 	// add code for the delete mapping "/users/{userId}" endpoint
 	@CrossOrigin
 	@DeleteMapping("/users/{userId}")
 	public ResponseEntity<UserSuccessResponse> deleteUser(@PathVariable int userId) {
 		return userService.deleteUser(userId);
 	}
-	
+
 	// add code for the post mapping "/users" endpoint
 	@CrossOrigin
 	@PostMapping("/users")
@@ -70,47 +71,40 @@ public class ApplicationController {
 		theUser.setId(0);
 		return userService.saveUser(theUser);
 	}
-	
+
 	// add code for the put mapping "/users" endpoint
 	@CrossOrigin
 	@PutMapping("/users")
 	public ResponseEntity<UserSuccessResponse> updateUser(@RequestBody User theUser) {
 		return userService.updateUser(theUser);
 	}
-	
+
 	// add code for the "/assets" endpoint
 	@CrossOrigin
 	@GetMapping("/assets")
-	public List<Asset> getAssets(@RequestParam("UserId") int theUserId) {		
+	public Set<Asset> getAssets(@RequestParam("UserId") int theUserId) {
 		return assetService.getAssets(theUserId);
 	}
-	
+
 	// add code for the "/assets/{assetId}" endpoint
 	@CrossOrigin
 	@GetMapping("/assets/{assetId}")
-	public Asset getAsset(@PathVariable int assetId) {		
+	public Asset getAsset(@PathVariable String assetId) {
 		return assetService.getAsset(assetId);
 	}
-	
-	// add code for the delete mapping "/assets/{assetId}" endpoint
+
+	// add code for the delete mapping "/assets/{userId}?id=" endpoint
 	@CrossOrigin
-	@DeleteMapping("/assets/{assetId}")
-	public ResponseEntity<UserSuccessResponse> deleteAsset(@PathVariable int assetId) {
-		return assetService.deleteAsset(assetId);
+	@DeleteMapping("/assets/{id}")
+	public ResponseEntity<UserSuccessResponse> deleteAsset(@PathVariable String id, @RequestParam("UserId") int userId) {
+		return assetService.deleteAsset(userId, id);
 	}
-	
+
 	// add code for the post mapping "/assets" endpoint
 	@CrossOrigin
 	@PostMapping("/assets")
-	public ResponseEntity<AssetCreatedResponse> postAsset(@RequestBody Asset theAsset, @RequestParam("UserId") int theUserId) {
-		theAsset.setId(0);
+	public ResponseEntity<AssetCreatedResponse> postAsset(@RequestBody Asset theAsset,
+			@RequestParam("UserId") int theUserId) {
 		return assetService.saveAsset(theAsset, theUserId);
-	}
-	
-	// add code for the put mapping "/assets" endpoint
-	@CrossOrigin
-	@PutMapping("/assets")
-	public ResponseEntity<UserSuccessResponse> updateUser(@RequestBody Asset theAsset) {
-		return assetService.updateAsset(theAsset);
 	}
 }

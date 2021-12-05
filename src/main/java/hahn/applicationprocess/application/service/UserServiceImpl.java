@@ -17,7 +17,7 @@ public class UserServiceImpl implements UserService {
 	// need to inject user dao
 	@Autowired
 	private UserDAO userDAO;
-	
+
 	@Override
 	@Transactional
 	public List<User> getUsers() {
@@ -30,7 +30,7 @@ public class UserServiceImpl implements UserService {
 
 		return userDAO.saveUser(theUser);
 	}
-	
+
 	@Override
 	@Transactional
 	public ResponseEntity<UserSuccessResponse> updateUser(User theUser) {
@@ -41,14 +41,14 @@ public class UserServiceImpl implements UserService {
 	@Override
 	@Transactional
 	public User getUser(int theId) {
-		
+
 		return userDAO.getUser(theId);
 	}
-	
+
 	@Override
 	@Transactional
 	public User getUserDetails(String mailId, String firstName) {
-		
+
 		return userDAO.getUserDetails(mailId, firstName);
 	}
 
@@ -58,8 +58,3 @@ public class UserServiceImpl implements UserService {
 		return userDAO.deleteUser(theId);
 	}
 }
-
-
-
-
-

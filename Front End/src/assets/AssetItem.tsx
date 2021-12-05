@@ -1,26 +1,26 @@
 import { useState } from "react";
 import { Card, Button, CloseButton } from "react-bootstrap";
 import { useTranslation } from "react-i18next";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import useHttp from "../hooks/use-http";
 import CustomModal from "../Modals/CustomModal";
-import { removeAsset, setToast } from "../store";
+import { removeAsset, RootState, setToast } from "../store";
 
 const AssetItem: React.FC<{
-  key: number;
-  id: number;
-  assetId: string;
+  key: string;
+  id: string;
   name: string;
   symbol: string;
 }> = (props) => {
   const { sendRequest: deleteAsset } = useHttp();
   const dispatch = useDispatch();
   const [showModal, setShowModal] = useState(false);
+  const userId = useSelector((state: RootState) => state.userSlice.id);
   const { t } = useTranslation();
   const onRemoveHandler = async () => {
     await deleteAsset(
       {
-        url: `http://localhost:8083/hahn-application/api/assets/${props.id}`,
+        url: `http://localhost:8083/hahn-application/api/assets/${props.id}?UserId=${userId}`,
         method: "DELETE",
         headers: {
           "Content-Type": "application/json",
@@ -45,7 +45,7 @@ const AssetItem: React.FC<{
       key={props.id}
       text="white"
       style={{ width: "15rem" }}
-      className="m-2"
+      className="shadow m-2"
     >
       <Card.Header className="text-info">
         {props.name}
@@ -61,9 +61,9 @@ const AssetItem: React.FC<{
         </Card.Title>
         <Card.Text>
           {t("description.symbol")} {props.symbol}
-          <br /> {t("description.id")} {props.assetId}
+          <br /> {t("description.id")} {props.id}
         </Card.Text>
-        <Button variant="info" onClick={() => setShowModal(true)}>
+        <Button variant="info" onClick={() => setShowModal(true)} className="shadow p-3 mb-5 bg-white rounded">
           {t("description.remove")}
         </Button>
       </Card.Body>

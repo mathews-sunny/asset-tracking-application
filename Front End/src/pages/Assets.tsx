@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import useHttp from "../hooks/use-http";
-import { asset, RootState, setAsset, setAssets, setToast } from "../store";
+import { asset, RootState, addAsset, setAssets, setToast } from "../store";
 import Tabs from "react-bootstrap/Tabs";
 import { Card, Form, Tab, Button, Row, Col } from "react-bootstrap";
 import AssetItem from "../assets/AssetItem";
@@ -82,7 +82,7 @@ const Assets: React.FC<{}> = (props) => {
       return;
     }
     let asset = {
-      assetId: enteredId,
+      id: enteredId,
       symbol: enteredSymbol,
       name: enteredName,
     };
@@ -111,7 +111,7 @@ const Assets: React.FC<{}> = (props) => {
       dispatch(setToast({ success: data.status, message: data.message }));
       console.log(data.asset);
       if (data.asset) {
-        dispatch(setAsset(data.asset));
+        dispatch(addAsset(data.asset));
       }
       formResetHandler();
     }
@@ -214,7 +214,6 @@ const Assets: React.FC<{}> = (props) => {
               <AssetItem
                 key={asset.id}
                 id={asset.id}
-                assetId={asset.assetId}
                 symbol={asset.symbol}
                 name={asset.name}
               />

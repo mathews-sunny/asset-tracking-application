@@ -1,6 +1,6 @@
 package hahn.applicationprocess.application.service;
 
-import java.util.List;
+import java.util.Set;
 
 import org.springframework.http.ResponseEntity;
 
@@ -10,14 +10,12 @@ import hahn.applicationprocess.application.success.UserSuccessResponse;
 
 public interface AssetService {
 
-	public List<Asset> getAssets(int theUserId);
+	public Set<Asset> getAssets(int theUserId);
 
 	public ResponseEntity<AssetCreatedResponse> saveAsset(Asset theAsset, int theUserId);
-	
-	public ResponseEntity<UserSuccessResponse> updateAsset(Asset theAsset);
 
-	public Asset getAsset(int theId);
+	public Asset getAsset(String theId);
 
-	public ResponseEntity<UserSuccessResponse> deleteAsset(int theId);
+	public ResponseEntity<UserSuccessResponse> deleteAsset(int userId, String id);
 	
 }

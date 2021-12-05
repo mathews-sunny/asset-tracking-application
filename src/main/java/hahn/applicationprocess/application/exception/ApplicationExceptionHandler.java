@@ -25,10 +25,10 @@ public class ApplicationExceptionHandler extends ResponseEntityExceptionHandler 
     {
         UserErrorResponse error = new UserErrorResponse();
         error.setStatus(HttpStatus.CONFLICT.value());
-        if(ex.getCause().getLocalizedMessage().contains("asset.asset_unique")) {
-        	error.setMessage("Asset already exists in the tracked list.");
+        if(ex.getCause().getLocalizedMessage().contains("asset.UC_asset")) {
+        	error.setMessage("Asset already exists in the tracked list!");
         }else {      	
-        	error.setMessage("Mail id already exists");
+        	error.setMessage("Mail id already exists!");
         }
         return new ResponseEntity<>(error, HttpStatus.CONFLICT);
     }

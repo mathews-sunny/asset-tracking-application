@@ -24,8 +24,7 @@ export interface UserState {
 }
 
 export interface asset {
-  id: number;
-  assetId: string;
+  id: string;
   symbol: string;
   name: string;
 }
@@ -46,7 +45,7 @@ export interface apiAsset {
   explorer: string;
 }
 export type ApiAssetsState = {
-  apiAllAssets: apiAsset[];
+  apiAssets: apiAsset[];
 };
 
 export const initialTldState: TldState = { tlds: [] };
@@ -115,11 +114,11 @@ export const assetsSlice = createSlice({
       state.assets = payload;
       console.log(payload);
     },
-    setAsset: (state, { payload }: PayloadAction<asset>) => {
+    addAsset: (state, { payload }: PayloadAction<asset>) => {
       state.assets.push(payload);
       console.log(payload);
     },
-    removeAsset: (state, { payload }: PayloadAction<number>) => {
+    removeAsset: (state, { payload }: PayloadAction<string>) => {
       state.assets = state.assets.filter((asset) => asset.id !== payload);
       console.log(payload);
     },
@@ -127,17 +126,21 @@ export const assetsSlice = createSlice({
 });
 
 export const initialApiAssetsState: ApiAssetsState = {
-  apiAllAssets: []
+  apiAssets: []
 };
 
 export const apiAssetsSlice = createSlice({
   name: "apiAssets",
   initialState: initialApiAssetsState,
   reducers: {
-    setApiAssets: (state, { payload }: PayloadAction<apiAsset[]>) => {
-      state.apiAllAssets = payload;
+    setApiAssets: (
+      state,
+      { payload }: PayloadAction<apiAsset[]>
+    ) => {
+      state.apiAssets = payload;
       console.log(payload);
     },
+
   },
 });
 
@@ -154,7 +157,7 @@ const store = configureStore({
 export const { setTld } = tldSlice.actions;
 export const { setToast } = toastSlice.actions;
 export const { setUser } = userSlice.actions;
-export const { setAssets, setAsset, removeAsset } = assetsSlice.actions;
+export const { setAssets, addAsset, removeAsset } = assetsSlice.actions;
 export const { setApiAssets } = apiAssetsSlice.actions;
 export type RootState = ReturnType<typeof store.getState>;
 export default store;

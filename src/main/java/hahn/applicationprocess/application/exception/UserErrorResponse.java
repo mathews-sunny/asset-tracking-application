@@ -3,9 +3,9 @@ package hahn.applicationprocess.application.exception;
 public class UserErrorResponse {
 	private int status;
 	private String message;
-	
+
 	public UserErrorResponse() {
-		
+
 	}
 
 	public UserErrorResponse(int status, String message) {
@@ -28,6 +28,5 @@ public class UserErrorResponse {
 	public void setMessage(String message) {
 		this.message = message;
 	}
-	
-	
+
 }

@@ -2,7 +2,7 @@ import { Card, Button } from "react-bootstrap";
 import { useTranslation } from "react-i18next";
 import { useDispatch, useSelector } from "react-redux";
 import useHttp from "../hooks/use-http";
-import { asset, RootState, setAsset, setToast } from "../store";
+import { asset, RootState, addAsset, setToast } from "../store";
 
 const AllAssetsItem: React.FC<{
   key: string;
@@ -16,7 +16,7 @@ const AllAssetsItem: React.FC<{
   const { sendRequest: saveAsset } = useHttp();
   const addAssetHandler = async () => {
     let asset = {
-      assetId: props.id,
+      id: props.id,
       symbol: props.symbol,
       name: props.name,
     };
@@ -45,7 +45,7 @@ const AllAssetsItem: React.FC<{
       dispatch(setToast({ success: data.status, message: data.message }));
       console.log(data.asset);
       if (data.asset) {
-        dispatch(setAsset(data.asset));
+        dispatch(addAsset(data.asset));
       }
     }
   };

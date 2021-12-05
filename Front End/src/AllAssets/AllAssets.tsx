@@ -9,8 +9,11 @@ import AllAssetsItem from "./AllAssetsItem";
 const AllAssets: React.FC<{}> = (props) => {
   const { sendRequest: fetchApi } = useHttp();
   const dispatch = useDispatch();
-  const allAssets = useSelector(
-    (state: RootState) => state.apiAssetsSlice.apiAllAssets
+  const userAssets = useSelector(
+    (state: RootState) => state.assetsSlice.assets
+  );
+  const apiAssets = useSelector(
+    (state: RootState) => state.apiAssetsSlice.apiAssets
   );
   const { t } = useTranslation();
   const apiResponseHandler = (data: any) => {
@@ -35,16 +38,19 @@ const AllAssets: React.FC<{}> = (props) => {
 
   return (
     <div className="d-flex flex-row flex-wrap">
-      {allAssets.length > 0 &&
-        allAssets.map((asset) => (
-          <AllAssetsItem
-            key={asset.id}
-            id={asset.id}
-            symbol={asset.symbol}
-            name={asset.name}
-          />
-        ))}
-      {allAssets.length === 0 && (
+      {apiAssets.length > 0 &&
+        apiAssets.map(
+          (asset) =>
+            !userAssets.find((userAsset) => asset.id === userAsset.id) && (
+              <AllAssetsItem
+                key={asset.id}
+                id={asset.id}
+                symbol={asset.symbol}
+                name={asset.name}
+              />
+            )
+        )}
+      {(apiAssets.length === 0 || apiAssets.length === userAssets.length) && (
         <Card
           bg="dark"
           border="info"

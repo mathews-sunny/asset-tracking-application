@@ -54,33 +54,8 @@ public class UserDAOImpl implements UserDAO {
 		// get current hibernate session
 		Session currentSession = sessionFactory.getCurrentSession();
 
-		int length = theUser.getEmail().trim().length();
-		int index = theUser.getEmail().lastIndexOf('.');
-		String nonDomain = "";
-		String domain = "";
-		String regex = "[0-9a-zA-Z]+(.[0-9a-zA-Z]+)?@[0-9A-Za-z]+(.[0-9a-zA-Z]+)?";
-		if (index > -1) {
-			nonDomain = theUser.getEmail().substring(0, index);
-			domain = theUser.getEmail().substring(index + 1, length);
-		}
-
-		if (theUser.getAge() <= 18) {
-			throw new InvalidUserException("User age should be more than 18");
-		} else if (theUser.getFirstName().trim().length() < 3) {
-			throw new InvalidUserException("Input more than 3 characters for first name");
-		} else if (theUser.getLastName().trim().length() < 3) {
-			throw new InvalidUserException("Input more than 3 characters for Last name");
-		} else if (theUser.getAddress().getStreet().trim().length() == 0) {
-			throw new InvalidUserException("Street name cannot be empty");
-		} else if (theUser.getAddress().getHouseNumber().trim().length() == 0) {
-			throw new InvalidUserException("House number cannot be empty");
-		} else if (theUser.getAddress().getPostalCode() == 0) {
-			throw new InvalidUserException("Enter a valid postal code");
-		} else if (length == 0 || index == -1 || !Pattern.matches(regex, nonDomain)) {
-			throw new InvalidUserException("Invalid mail id");
-		} else if (!domainValidator.isValidCountryCodeTld(domain) && !domainValidator.isValidInfrastructureTld(domain)
-				&& !domainValidator.isValidGenericTld(domain))
-			throw new InvalidUserException("Invalid Top Level Domain for the mail");
+		validateUser(theUser);
+		validateEmail(theUser.getEmail());
 
 		// save/upate the User ...
 		UserSuccessResponse response = new UserSuccessResponse();
@@ -97,20 +72,21 @@ public class UserDAOImpl implements UserDAO {
 		// get current hibernate session
 		Session currentSession = sessionFactory.getCurrentSession();
 
-		if (theUser.getAge() <= 18) {
-			throw new InvalidUserException("User age should be more than 18");
-		} else if (theUser.getFirstName().trim().length() < 3) {
-			throw new InvalidUserException("Input more than 3 characters for first name");
-		} else if (theUser.getLastName().trim().length() < 3) {
-			throw new InvalidUserException("Input more than 3 characters for Last name");
-		} else if (theUser.getAddress().getStreet().trim().length() == 0) {
-			throw new InvalidUserException("Street name cannot be empty");
-		} else if (theUser.getAddress().getHouseNumber().trim().length() == 0) {
-			throw new InvalidUserException("House number cannot be empty");
-		} else if (theUser.getAddress().getPostalCode() == 0) {
-			throw new InvalidUserException("Enter a valid postal code");
-		}
+		validateUser(theUser);
+		validateEmail(theUser.getEmail());
+		
+		Query<User> theQuery = currentSession
+				.createQuery("from User u where u.Email=:emailId", User.class);
+		theQuery.setParameter("emailId", theUser.getEmail());
 
+		User theUpdatingUser = null;
+		try {
+			theUpdatingUser = (User) theQuery.getSingleResult();
+		} catch (NoResultException ex) {
+			throw new UserNotFoundException("User not found");
+		}
+		
+		currentSession.evict(theUpdatingUser);
 		// save/upate the User ...
 		currentSession.update(theUser);
 		UserSuccessResponse response = new UserSuccessResponse();
@@ -129,7 +105,7 @@ public class UserDAOImpl implements UserDAO {
 		User theUser = currentSession.get(User.class, theId);
 
 		if (theUser == null) {
-			throw new UserNotFoundException("User not found : " + theId);
+			throw new UserNotFoundException("User not found");
 		}
 
 		return theUser;
@@ -141,26 +117,14 @@ public class UserDAOImpl implements UserDAO {
 		// get the current hibernate session
 		Session currentSession = sessionFactory.getCurrentSession();
 
-		int length = mailId.trim().length();
-		int index = mailId.lastIndexOf('.');
-		String nonDomain = "";
-		String domain = "";
-		String regex = "[0-9a-zA-Z]+(.[0-9a-zA-Z]+)?@[0-9A-Za-z]+(.[0-9a-zA-Z]+)?";
-		if (index > -1) {
-			nonDomain = mailId.substring(0, index);
-			domain = mailId.substring(index + 1, length);
-		}
-
 		if (firstName.trim().length() < 3) {
 			throw new InvalidUserException("Input more than 3 characters for first name");
-		} else if (length == 0 || index == -1 || !Pattern.matches(regex, nonDomain)) {
-			throw new InvalidUserException("Invalid mail id");
-		} else if (!domainValidator.isValidCountryCodeTld(domain) && !domainValidator.isValidInfrastructureTld(domain)
-				&& !domainValidator.isValidGenericTld(domain))
-			throw new InvalidUserException("Invalid Top Level Domain for the mail");
+		}
+		validateEmail(mailId);
 
 		// now retrieve/read from database using the mail id and first name
-		Query theQuery = currentSession.createQuery("from User u where u.Email=:emailId and u.firstName=:firstName");
+		Query<User> theQuery = currentSession
+				.createQuery("from User u where u.Email=:emailId and u.firstName=:firstName", User.class);
 		theQuery.setParameter("emailId", mailId);
 		theQuery.setParameter("firstName", firstName);
 		User theUser = null;
@@ -169,10 +133,6 @@ public class UserDAOImpl implements UserDAO {
 		} catch (NoResultException ex) {
 			throw new UserNotFoundException("User not found");
 		}
-
-//		if (theUser == null) {
-//			throw new UserNotFoundException("User not found");
-//		}
 
 		return theUser;
 	}
@@ -185,7 +145,7 @@ public class UserDAOImpl implements UserDAO {
 
 		User theUser = currentSession.get(User.class, theId);
 		if (theUser == null) {
-			throw new UserNotFoundException("User not found : " + theId);
+			throw new UserNotFoundException("User not found");
 		}
 		// delete object with primary key
 		UserSuccessResponse response = new UserSuccessResponse();
@@ -193,6 +153,56 @@ public class UserDAOImpl implements UserDAO {
 		response.setMessage("Deleted user : " + theUser.getFirstName());
 		currentSession.delete(theUser);
 		return new ResponseEntity<>(response, HttpStatus.OK);
+	}
+
+	public boolean validateEmail(String mailId) {
+		boolean validFlag = true;
+		int length = mailId.trim().length();
+		int index = mailId.lastIndexOf('.');
+		String nonDomain = "";
+		String domain = "";
+		String regex = "[0-9a-zA-Z]+(.[0-9a-zA-Z]+)?@[0-9A-Za-z]+(.[0-9a-zA-Z]+)?";
+		if (index > -1) {
+			nonDomain = mailId.substring(0, index);
+			domain = mailId.substring(index + 1, length);
+		}
+
+		if (length == 0) {
+			validFlag = false;
+			throw new InvalidUserException("Please provide a mail id!");
+		} else if (index == -1 || !Pattern.matches(regex, nonDomain)) {
+			validFlag = false;
+			throw new InvalidUserException("Invalid mail id");
+		} else if (!domainValidator.isValidCountryCodeTld(domain) && !domainValidator.isValidInfrastructureTld(domain)
+				&& !domainValidator.isValidGenericTld(domain)) {
+			validFlag = false;
+			throw new InvalidUserException("Invalid Top Level Domain for the mail");
+		}
+		return validFlag;
+	}
+
+	public boolean validateUser(User theUser) {
+		boolean validFlag = true;
+		if (theUser.getAge() <= 18) {
+			validFlag = false;
+			throw new InvalidUserException("User age should be more than 18");
+		} else if (theUser.getFirstName().trim().length() < 3) {
+			validFlag = false;
+			throw new InvalidUserException("Input more than 3 characters for first name");
+		} else if (theUser.getLastName().trim().length() < 3) {
+			validFlag = false;
+			throw new InvalidUserException("Input more than 3 characters for Last name");
+		} else if (theUser.getAddress().getStreet().trim().length() == 0) {
+			validFlag = false;
+			throw new InvalidUserException("Street name cannot be empty");
+		} else if (theUser.getAddress().getHouseNumber().trim().length() == 0) {
+			validFlag = false;
+			throw new InvalidUserException("House number cannot be empty");
+		} else if (theUser.getAddress().getPostalCode() == 0) {
+			validFlag = false;
+			throw new InvalidUserException("Enter a valid postal code");
+		}
+		return validFlag;
 	}
 
 }

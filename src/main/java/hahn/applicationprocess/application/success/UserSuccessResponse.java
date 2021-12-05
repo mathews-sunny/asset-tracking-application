@@ -7,7 +7,7 @@ public class UserSuccessResponse {
 	private String message;
 	@JsonIgnore
 	String id;
-	
+
 	public String getId() {
 		return id;
 	}
@@ -17,13 +17,13 @@ public class UserSuccessResponse {
 	}
 
 	public UserSuccessResponse() {
-		
+
 	}
 
 	public UserSuccessResponse(int status, String message, String id) {
 		this.status = status;
 		this.message = message;
-		this.id=id;
+		this.id = id;
 	}
 
 	public int getStatus() {
@@ -41,6 +41,5 @@ public class UserSuccessResponse {
 	public void setMessage(String message) {
 		this.message = message;
 	}
-	
-	
+
 }

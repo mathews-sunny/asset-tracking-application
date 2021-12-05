@@ -1,6 +1,6 @@
 package hahn.applicationprocess.application.dao;
 
-import java.util.List;
+import java.util.Set;
 
 import org.springframework.http.ResponseEntity;
 
@@ -10,14 +10,12 @@ import hahn.applicationprocess.application.success.UserSuccessResponse;
 
 public interface AssetDAO {
 
-	public List<Asset> getAssets(int theUserid);
+	public Set<Asset> getAssets(int theUserId);
 
 	public ResponseEntity<AssetCreatedResponse> saveAsset(Asset theAsset, int theUserId);
-	
-	public ResponseEntity<UserSuccessResponse> updateAsset(Asset theAsset);
 
-	public Asset getAsset(int theId);
+	public Asset getAsset(String id);
 
-	public ResponseEntity<UserSuccessResponse> deleteAsset(int theId);
+	public ResponseEntity<UserSuccessResponse> deleteAsset(int userId, String id);
 	
 }

@@ -13,13 +13,13 @@ public class ApplicationDispatcherServletInitializer extends AbstractAnnotationC
 	@Override
 	protected Class<?>[] getServletConfigClasses() {
 		// TODO Auto-generated method stub
-		return new Class[] {HahnApplicationConfig.class};
+		return new Class[] { HahnApplicationConfig.class };
 	}
 
 	@Override
 	protected String[] getServletMappings() {
 		// TODO Auto-generated method stub
-		return new String[] {"/"};
+		return new String[] { "/" };
 	}
 
 }

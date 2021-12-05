@@ -36,7 +36,7 @@
     "test": "react-scripts test",
     "eject": "react-scripts eject"
   },
-  "proxy": "https://hahn.applicationprocess.application.com:8032",
+  "proxy": "http://localhost:8083/",
   "eslintConfig": {
     "extends": [
       "react-app",

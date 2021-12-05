@@ -81,7 +81,7 @@ i18n
             assetsList: "Assets List",
             profile: "User Profile",
             mainPage: "Main Page",
-            add: "Add"
+            add: "Add",
           },
         },
       },

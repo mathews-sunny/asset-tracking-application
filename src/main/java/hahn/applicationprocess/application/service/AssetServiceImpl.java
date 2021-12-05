@@ -1,6 +1,6 @@
 package hahn.applicationprocess.application.service;
 
-import java.util.List;
+import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -18,10 +18,10 @@ public class AssetServiceImpl implements AssetService {
 	// need to inject Asset dao
 	@Autowired
 	private AssetDAO assetDAO;
-	
+
 	@Override
 	@Transactional
-	public List<Asset> getAssets(int theUserId) {
+	public Set<Asset> getAssets(int theUserId) {
 		return assetDAO.getAssets(theUserId);
 	}
 
@@ -31,28 +31,16 @@ public class AssetServiceImpl implements AssetService {
 
 		return assetDAO.saveAsset(theAsset, theUserId);
 	}
-	
-	@Override
-	@Transactional
-	public ResponseEntity<UserSuccessResponse> updateAsset(Asset theAsset) {
-
-		return assetDAO.updateAsset(theAsset);
-	}	
 
 	@Override
 	@Transactional
-	public Asset getAsset(int theId) {
+	public Asset getAsset(String theId) {
 		return assetDAO.getAsset(theId);
 	}
 
 	@Override
 	@Transactional
-	public ResponseEntity<UserSuccessResponse> deleteAsset(int theId) {
-		return assetDAO.deleteAsset(theId);
+	public ResponseEntity<UserSuccessResponse> deleteAsset(int userId, String id) {
+		return assetDAO.deleteAsset(userId, id);
 	}
 }
-
-
-
-
-

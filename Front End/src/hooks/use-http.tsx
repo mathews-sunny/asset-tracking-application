@@ -21,7 +21,15 @@ const useHttp = () => {
           response.status === 404
         ) {
           const errorData = await response.json();
+          console.log(errorData);
           applyData({ status: false, message: errorData.message });
+        }
+        if (
+          response.status === 429 
+        ) {
+          const errorData = await response.json();
+          console.log(errorData)
+          applyData({ status: false, message: "Coincap Api is busy!! Try Again."});
         }
         if (response.status === 201) {
           const data = await response.json();
