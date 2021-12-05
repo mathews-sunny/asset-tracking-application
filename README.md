@@ -44,7 +44,7 @@ React Js supported by Spring REST backend.
  ###### SETUP
       
    1. [Sql Scripts](https://github.com/mathews-sunny/hahn-applicationprocess-application/tree/master/Scripts/) contains all the sql db scripts
-      required to create the database (user_asset_tracker) and tables (users, address, and asset). 
+      required to create the database (user_asset_tracker) and tables (users, address, asset and user_asset). 
    2. All the files other than front end folder and scripts are related to API. Update url, username and password in the 
       hibernate.cfg.xml file as per created DB details.
       
@@ -103,14 +103,16 @@ React Js supported by Spring REST backend.
   8. A user can add tracked asset via two methods : First one is by using the add asset form in the tracked assets tab. Validation is provided for these fields also.
   ![invalid asset](https://github.com/mathews-sunny/hahn-applicationprocess-application/blob/master/application%20screenshots/invalid%20asset.png?raw=true)
   
-  9. After giving valid data in the fields and click send, tracked assets will be updated.
+  9. After giving valid data in the fields and click send, tracked assets will be updated with the newly tracked asset.
   ![asset added](https://github.com/mathews-sunny/hahn-applicationprocess-application/blob/master/application%20screenshots/added%20asset.png?raw=true)
   
-  10. Second method to add assets is more UI method!! We can make use of the Assets Lists tab which, list all the available assets, by clicking on add button we can add
-   assets for tracking
+  10. Second method to add assets is more UI method!! We can make use of the Assets Lists tab which lists all the assets which are not tracked by the particular user. By clicking
+  on add button we can add the asset to the tracked assets list. The added asset will be removed from the all assets tab. Since the all assets data is fetched from Coincap API ,
+  more details on the asset could be displayed to the user as per need, here it is limited to only symbol, name and id.
   ![asset list](https://github.com/mathews-sunny/hahn-applicationprocess-application/blob/master/application%20screenshots/assets%20list.png?raw=true)
   
-  11. In tracked assets tab , the remove button or the close button on the assets can be used to remove assets from tracking list. 
+  11. In tracked assets tab , the remove button or the close button on the assets can be used to remove assets from tracking list. Removed asset will be displayed with the 
+  all assets instantly.
     ![remove asset](https://github.com/mathews-sunny/hahn-applicationprocess-application/blob/master/application%20screenshots/remove.png?raw=true)
     
   12. In the profile tab the user details, can be verified. And it provides a button to go back to main screen and check another user or create more users.
@@ -118,4 +120,4 @@ React Js supported by Spring REST backend.
     
   ## Conclusion 
   The asset tracking application built on react and spring could server the users satisfactorily. The backend aids to application efficiency by its swift response on the API
-  calls. The client side and server side validation not only help user to make corrections but also safegaurd from some malpractises. 
+  calls. The client side and server side validation not only help user to make corrections but also safegaurd from some malpractises. The application UI is built on a reactive       interface, which makes the user interactions much easier.
